@@ -48,6 +48,31 @@ void addCircle(int x, int y, int r, bool dyn=true){
   body->CreateFixture(&fixturedef); //add a fixture to the body
 }
 
+b2Body* addTriangle(int cx,int cy, int scale, bool dyn=true)
+{
+	b2BodyDef bodydef;
+	bodydef.position.Set(cx*P2M,cy*P2M);//Co-ordinates of the center of the rectangle
+	if(dyn)
+		bodydef.type=b2_dynamicBody;
+	else
+	  bodydef.type=b2_staticBody;
+
+	b2Body* body=world->CreateBody(&bodydef);
+
+	b2Vec2 vertices[3];
+  vertices[0].Set(-3*scale*P2M, -2*scale*P2M);
+	vertices[1].Set(3*scale*P2M,  -2*scale*P2M);//The vertices need to be specified in counter clockwise order. !!!!Important!!!!
+	vertices[2].Set(0*scale*P2M,  4*scale*P2M);
+
+	b2PolygonShape shape;
+	shape.Set(vertices, 3);
+	b2FixtureDef fixturedef;
+	fixturedef.shape=&shape;
+	fixturedef.density=0.5;
+	fixturedef.friction = 0.6;
+	body->CreateFixture(&fixturedef);
+}
+
 void drawSquare(b2Vec2* points,b2Vec2 center,float angle)
 {
 	glColor3f(1,1,1);
@@ -79,6 +104,19 @@ void drawCircle(b2Vec2 center, float angle){
 	glPopMatrix();
 }
 
+void drawTriangle(b2Vec2* points, b2Vec2 center, float angle){
+	glColor3f(0,1,1);
+	glPushMatrix();
+		glTranslatef(center.x*M2P,center.y*M2P,0);
+		glRotatef(angle*180.0/M_PI,0,0,1);
+		glBegin(GL_POLYGON);
+			for(int i=0;i<3;i++)
+				glVertex2f(points[i].x*M2P,points[i].y*M2P);
+		glEnd();
+		glFlush();
+	glPopMatrix();
+}
+
 void init()
 {
 	glMatrixMode(GL_PROJECTION);
@@ -102,26 +140,48 @@ void display()
 	    drawCircle(tmp->GetWorldCenter(), tmp->GetAngle());
 	    tmp=tmp->GetNext();
 	  }
-		else{
+		else if(((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertexCount() == 3){
+			for(int i=0;i<3;i++)
+				points[i]=((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertex(i);
+
+			drawTriangle(points, tmp->GetWorldCenter(), tmp->GetAngle());
+			tmp=tmp->GetNext();
+		}
+		else
+		{
   		  for(int i=0;i<4;i++)
 	  		  points[i]=((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertex(i);
 
 	  	    drawSquare(points,tmp->GetWorldCenter(),tmp->GetAngle());
 	  	    tmp=tmp->GetNext();
-	  	  }
+	  }
 	}
 		glutSwapBuffers();
 }
 
 
 void keyboard(unsigned char key, int x, int y){
-  if(key == ' '){
-    addRect(x,y,100,20,false);
-  }else if(key == 's'){
-    addRect(x,y,20,20,true);
-  }else if(key == 'a'){
-    addCircle(x,y,20,true);
-  }
+	if(key == ' '){
+		addRect(x,y,100,20,false);
+	}
+	else if(key == 's'){
+		addRect(x,y,20,20,true);
+	}
+	else if(key == 'a'){
+		addCircle(x,y,20,true);
+	}
+	else if(key == 'd'){
+		addTriangle(x,y,4,true);
+	}
+	else if(key == 'S'){
+		addRect(x,y,20,20,false);
+	}
+	else if(key == 'A'){
+		addCircle(x,y,20,false);
+	}
+	else if(key == 'D'){
+		addTriangle(x,y,4,false);
+	}
 }
 
 void step(){
