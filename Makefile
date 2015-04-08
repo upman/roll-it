@@ -24,5 +24,5 @@ build/circle.o : components/circle.cpp
 build/rectangle.o : components/rectangle.cpp
 	$(CXX) -c components/rectangle.cpp -o build/rectangle.o
 
-build/app : build/main.o build/triangle.o build/circle.o build/rectangle.o build
+build/app : build build/main.o build/triangle.o build/circle.o build/rectangle.o build
 	cd build &&	$(CXX) main.o triangle.o circle.o rectangle.o $(LIBS) -o app
