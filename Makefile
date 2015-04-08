@@ -1,11 +1,11 @@
 LIBS    = -lm -lGL -lGLU -lglut -lBox2D
 
-all : build build/app
+all : build/app
 
 clean :
 	rm -r build
 
-run :
+run : build/app
 	cd build && ./app
 
 build :
@@ -23,5 +23,5 @@ build/circle.o : components/circle.cpp
 build/rectangle.o : components/rectangle.cpp
 	$(CXX) -c components/rectangle.cpp -o build/rectangle.o
 
-build/app : build/main.o build/triangle.o build/circle.o build/rectangle.o
+build/app : build/main.o build/triangle.o build/circle.o build/rectangle.o build
 	cd build &&	$(CXX) main.o triangle.o circle.o rectangle.o $(LIBS) -o app
