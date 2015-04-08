@@ -1,4 +1,3 @@
-#include<stdio.h>
 #include <GL/glut.h>
 #include <Box2D/Box2D.h>
 const int WIDTH=640;
@@ -16,16 +15,37 @@ b2Body* addRect(int x,int y,int w,int h,bool dyn=true)
 		bodydef.type=b2_dynamicBody;
 	else
 	  bodydef.type=b2_staticBody;
-		
+
 	b2Body* body=world->CreateBody(&bodydef);
-	
+
 	b2PolygonShape shape;
 	shape.SetAsBox(P2M*w/2,P2M*h/2);
-	
+
 	b2FixtureDef fixturedef;
 	fixturedef.shape=&shape;
 	fixturedef.density=0.1;
 	body->CreateFixture(&fixturedef);
+}
+
+void addCircle(int x, int y, int r, bool dyn=true){
+
+  b2BodyDef bodydef;
+	bodydef.position.Set(x*P2M,y*P2M);
+	if(dyn)
+		bodydef.type=b2_dynamicBody;
+	else
+	  bodydef.type=b2_staticBody;
+	b2Body* body=world->CreateBody(&bodydef);
+
+  b2CircleShape circleShape;
+  circleShape.m_p.Set(0, 0); //position, relative to body position
+  circleShape.m_radius = 1; //radius
+
+  b2FixtureDef fixturedef;
+  fixturedef.shape = &circleShape; //this is a pointer to the shape above
+  fixturedef.friction = 0.00f;
+  fixturedef.restitution = 0.5f;
+  body->CreateFixture(&fixturedef); //add a fixture to the body
 }
 
 void drawSquare(b2Vec2* points,b2Vec2 center,float angle)
@@ -39,6 +59,23 @@ void drawSquare(b2Vec2* points,b2Vec2 center,float angle)
 				glVertex2f(points[i].x*M2P,points[i].y*M2P);
 		glEnd();
 		glFlush();
+	glPopMatrix();
+}
+
+void drawCircle(b2Vec2 center, float angle){
+	glPushMatrix();
+		glTranslatef(center.x*M2P,center.y*M2P,0);
+		glRotatef(angle*180.0/M_PI,0,0,1);
+      glBegin(GL_TRIANGLE_FAN);
+        glColor3f(0.0f, 0.0f, 1.0f);  // Blue
+        glVertex2f(0.0f, 0.0f);       // Center of circle
+        int numSegments = 100;
+        for (int i = 0; i <= numSegments; i++) { // Last vertex same as first vertex
+          angle = i * 2.0f * PI / numSegments;  // 360 deg for all segments
+          glVertex2f(cos(angle) * 20, sin(angle) * 20);
+        }
+      glEnd();
+		  glFlush();
 	glPopMatrix();
 }
 
@@ -61,23 +98,30 @@ void display()
 	b2Vec2 points[4];
 	while(tmp)
 	{
-		for(int i=0;i<4;i++)
-			points[i]=((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertex(i);
-	
-		drawSquare(points,tmp->GetWorldCenter(),tmp->GetAngle());
-		tmp=tmp->GetNext();
+		if(tmp->GetFixtureList()->GetType() ==  b2Shape::e_circle){
+	    drawCircle(tmp->GetWorldCenter(), tmp->GetAngle());
+	    tmp=tmp->GetNext();
+	  }
+		else{
+  		  for(int i=0;i<4;i++)
+	  		  points[i]=((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertex(i);
+
+	  	    drawSquare(points,tmp->GetWorldCenter(),tmp->GetAngle());
+	  	    tmp=tmp->GetNext();
+	  	  }
 	}
 		glutSwapBuffers();
 }
 
-void mouse(int button, int state, int x, int y){
-  if(button==GLUT_LEFT_BUTTON && state == GLUT_DOWN){
-    addRect(x,y,20,20,true);//add a square dynamic box
-  } else
-    if(button==GLUT_RIGHT_BUTTON && state == GLUT_DOWN){
-    addRect(x,y,100,20,false);// Add a flat, static rectangle
+
+void keyboard(unsigned char key, int x, int y){
+  if(key == ' '){
+    addRect(x,y,100,20,false);
+  }else if(key == 's'){
+    addRect(x,y,20,20,true);
+  }else if(key == 'a'){
+    addCircle(x,y,20,true);
   }
-  
 }
 
 void step(){
@@ -97,7 +141,7 @@ int main(int argc,char** argv)
 	glutCreateWindow("Boxes");
 	init();
 	glutDisplayFunc(display);
-	glutMouseFunc(mouse);
+	glutKeyboardFunc(keyboard);
   glutIdleFunc(step);
 	glutMainLoop();
 }
