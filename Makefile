@@ -1,4 +1,5 @@
 LIBS    = -lm -lGL -lGLU -lglut -lBox2D
+FLAGS = -Wall -std=c++11
 
 all : build/app
 
@@ -8,10 +9,10 @@ clean :
 run : build/app
 	cd build && ./app
 
-build :
+build : 
 	mkdir build
 
-build/main.o : main.cpp build
+build/main.o : main.cpp
 	$(CXX) -c main.cpp -o build/main.o
 
 build/triangle.o : components/triangle.cpp
