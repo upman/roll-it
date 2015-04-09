@@ -20,20 +20,46 @@ void addCircle(int x, int y, int r,  b2World* world, bool dyn=true){
   fixturedef.restitution = 0.5f;
   body->CreateFixture(&fixturedef); //add a fixture to the body
 }
-
+void draw_pixel(GLint cx, GLint cy)
+{
+    glVertex2i(cx,cy);
+}
+void plotpixels(GLint h, GLint k, GLint x, GLint y)
+{
+    draw_pixel(x+h,y+k);
+    draw_pixel(-x+h,y+k);
+    draw_pixel(x+h,-y+k);
+    draw_pixel(-x+h,-y+k);
+    draw_pixel(y+h,x+k);
+    draw_pixel(-y+h,x+k);
+    draw_pixel(y+h,-x+k);
+    draw_pixel(-y+h,-x+k);
+}
+void Circle_draw(GLint h, GLint k, GLint r)  // Midpoint Circle Drawing Algorithm
+{
+    GLint d =  1-r, x=0, y=r;
+    glBegin(GL_POLYGON);
+    while(y > x)
+    {
+        plotpixels(h,k,x,y);
+        if(d < 0)
+            d+=2*x+3;
+        else
+        {
+            d+=2*(x-y)+5;
+            --y;
+        }
+        ++x;
+    }
+    plotpixels(h,k,x,y);
+    glEnd();
+}
 void drawCircle(b2Vec2 center, float angle){
 	glPushMatrix();
 		glTranslatef(center.x*M2P,center.y*M2P,0);
 		glRotatef(angle*180.0/M_PI,0,0,1);
-      glBegin(GL_TRIANGLE_FAN);
-        glColor3f(0.0f, 0.0f, 1.0f);  // Blue
-        glVertex2f(0.0f, 0.0f);       // Center of circle
-        int numSegments = 100;
-        for (int i = 0; i <= numSegments; i++) { // Last vertex same as first vertex
-          angle = i * 2.0f * PI / numSegments;  // 360 deg for all segments
-          glVertex2f(cos(angle) * 20, sin(angle) * 20);
-        }
-      glEnd();
-		  glFlush();
+		glColor3f(0.0f, 0.0f, 1.0f);  // Blue
+		Circle_draw(0.0,0.0,20.0);
+		glFlush();
 	glPopMatrix();
 }

@@ -89,7 +89,7 @@ int main(int argc,char** argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowPosition(0,0);
 	glutInitWindowSize(640,480);
-	glutCreateWindow("Boxes");
+	glutCreateWindow("Roll It");
 	init();
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
