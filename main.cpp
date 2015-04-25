@@ -1,11 +1,13 @@
 #include <GL/glut.h>
 #include <Box2D/Box2D.h>
 #include <string.h>
+#include <vector>
 #include "./components/headers/circle.h"
 #include "./components/headers/rectangle.h"
 #include "./components/headers/triangle.h"
+#include <stdio.h>
 b2World* world;
-
+b2Body* selectedBody;
 void init()
 {
 	glMatrixMode(GL_PROJECTION);
@@ -78,8 +80,54 @@ void keyboard(unsigned char key, int x, int y){
 	}
 }
 
+// void motion(int x, int y){
+//   addRect(x,y,1,1, world, false, false);
+// }
 void motion(int x, int y){
-  addRect(x,y,1,1, world, false, false);
+	if(selectedBody){
+		// selectedBody->SetTransform(b2Vec2(x*P2M,y*P2M),selectedBody->GetAngle());
+		b2Vec2 deltaPos = b2Vec2(x*P2M,y*P2M) - selectedBody->GetPosition();
+		selectedBody->ApplyForce(deltaPos, selectedBody->GetWorldCenter(),true);
+	}
+}
+class MyQueryCallback : public b2QueryCallback {
+  public:
+      std::vector<b2Body*> foundBodies;
+
+      bool ReportFixture(b2Fixture* fixture) {
+          foundBodies.push_back( fixture->GetBody() );
+          return true;//keep going to find all fixtures in the query area
+      }
+};
+
+  //in Step() function
+
+void mouse(int button, int state, int x, int y){
+
+	if (button == GLUT_LEFT_BUTTON){
+	if(state == GLUT_UP){
+		selectedBody->SetAwake(true);
+		selectedBody = NULL;
+	}
+	if (state == GLUT_DOWN){
+		b2Vec2 p;
+		p.Set((float)x*P2M,(float)y*P2M);
+		b2AABB aabb;
+	b2Vec2 d;
+	d.Set(0.001f, 0.001f);
+	aabb.lowerBound = p - d;
+	aabb.upperBound = p + d;
+
+	// Query the world for overlapping shapes.
+	MyQueryCallback  callback;
+	world->QueryAABB(&callback, aabb);
+
+	if (callback.foundBodies.size()>0)
+	{
+		selectedBody = callback.foundBodies[0];
+	}
+	}
+}
 }
 
 void step(){
@@ -100,6 +148,7 @@ int main(int argc,char** argv)
 	init();
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
+	glutMouseFunc(mouse);
 	glutMotionFunc(motion);
   glutIdleFunc(step);
 	glutMainLoop();
