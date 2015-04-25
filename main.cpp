@@ -85,9 +85,7 @@ void keyboard(unsigned char key, int x, int y){
 // }
 void motion(int x, int y){
 	if(selectedBody){
-		// selectedBody->SetTransform(b2Vec2(x*P2M,y*P2M),selectedBody->GetAngle());
-		b2Vec2 deltaPos = b2Vec2(x*P2M,y*P2M) - selectedBody->GetPosition();
-		selectedBody->ApplyForce(deltaPos, selectedBody->GetWorldCenter(),true);
+		selectedBody->SetTransform(b2Vec2(x*P2M,y*P2M),selectedBody->GetAngle());
 	}
 }
 class MyQueryCallback : public b2QueryCallback {
