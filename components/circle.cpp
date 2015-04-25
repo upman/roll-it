@@ -1,7 +1,6 @@
 #include "./headers/circle.h"
 
 void addCircle(int x, int y, int r,  b2World* world, bool dyn=true){
-
   b2BodyDef bodydef;
 	bodydef.position.Set(x*P2M,y*P2M);
 	if(dyn)
@@ -12,7 +11,7 @@ void addCircle(int x, int y, int r,  b2World* world, bool dyn=true){
 
   b2CircleShape circleShape;
   circleShape.m_p.Set(0, 0); //position, relative to body position
-  circleShape.m_radius = 1; //radius
+  circleShape.m_radius = r*P2M; //radius
 
   b2FixtureDef fixturedef;
   fixturedef.shape = &circleShape; //this is a pointer to the shape above
@@ -54,12 +53,12 @@ void Circle_draw(GLint h, GLint k, GLint r)  // Midpoint Circle Drawing Algorith
     plotpixels(h,k,x,y);
     glEnd();
 }
-void drawCircle(b2Vec2 center, float angle){
+void drawCircle(b2Vec2 center, float angle, float radius){
 	glPushMatrix();
 		glTranslatef(center.x*M2P,center.y*M2P,0);
 		glRotatef(angle*180.0/M_PI,0,0,1);
 		glColor3f(0.0f, 0.0f, 1.0f);  // Blue
-		Circle_draw(0.0,0.0,20.0);
+		Circle_draw(0.0,0.0,radius*M2P);
 		glFlush();
 	glPopMatrix();
 }

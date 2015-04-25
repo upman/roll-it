@@ -36,7 +36,7 @@ make run
 
   D - Add static triangle at the cursor's location.
 
-  space - Add flat static platform at the cursor's location.
+  space - Add flat static rotating platform at the cursor's location.
 
   left-click + drag - Draw a static line.
 
