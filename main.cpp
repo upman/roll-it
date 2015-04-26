@@ -16,6 +16,12 @@ void init()
 	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
 }
 
+void resetWorld(){
+	delete world;
+  world = new b2World(b2Vec2(0.0,2.0));
+  addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
+}
+
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -75,6 +81,8 @@ void keyboard(unsigned char key, int x, int y){
 	}
 	else if(key == 'D'){
 		addTriangle(x, y, 4, world, false);
+	}else if(key == 'R'){
+	  resetWorld();
 	}
 }
 
