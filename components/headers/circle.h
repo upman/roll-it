@@ -4,7 +4,7 @@
 #include <GL/glut.h>
 #include <Box2D/Box2D.h>
 #include "../../config/constants.h"
- // Hi
+
 void addCircle(int, int, int, b2World*, bool);
 void drawCircle(b2Vec2, float, float);
 

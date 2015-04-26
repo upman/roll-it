@@ -42,6 +42,8 @@ make run
 
   R - Clear all bodies in the world.
   
+  Q - Quit
+  
   right-click - Menu to reset or exit.
     
 ###Screenshots###

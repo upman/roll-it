@@ -22,10 +22,10 @@ void resetWorld(){
   addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
 }
 void menu(int value){
-	if(value==1){
+	if(value == 1){
 		resetWorld();
 	}
-	else if(value==2){
+	else if(value == 2){
 		exit(0);
 	}
 }
@@ -96,6 +96,9 @@ void keyboard(unsigned char key, int x, int y){
 		addTriangle(x, y, 4, world, false);
 	}else if(key == 'R'){
 	  resetWorld();
+	}
+	else if(key == 'Q'){
+		exit(0);
 	}
 }
 
