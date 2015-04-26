@@ -21,7 +21,20 @@ void resetWorld(){
   world = new b2World(b2Vec2(0.0,2.0));
   addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
 }
-
+void menu(int value){
+	if(value==1){
+		resetWorld();
+	}
+	else if(value==2){
+		exit(0);
+	}
+}
+void createMenu(){
+	glutCreateMenu(menu);
+	glutAddMenuEntry("Reset",1);
+	glutAddMenuEntry("Exit",2);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -106,9 +119,10 @@ int main(int argc,char** argv)
 	glutInitWindowSize(640,480);
 	glutCreateWindow("Roll It");
 	init();
+	createMenu();
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
 	glutMotionFunc(motion);
-  glutIdleFunc(step);
+  	glutIdleFunc(step);
 	glutMainLoop();
 }

@@ -41,7 +41,9 @@ make run
   left-click + drag - Draw a static line.
 
   R - Clear all bodies in the world.
-
+  
+  right-click - Menu to reset or exit.
+    
 ###Screenshots###
 <img src="http://i.imgur.com/fAuCq2r.png" width="400" height="300">
 <img src="http://i.imgur.com/WHoPaON.png" width="400" height="300">
