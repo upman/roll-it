@@ -49,7 +49,7 @@ make run
   
   Q - Quit
   
-  right-click - Menu to reset or exit.
+  right-click - Menu to reset world,reload configurations or exit.
 
 ### Configurations
   Configurations can be found in the config folder.
@@ -58,7 +58,9 @@ make run
 
   The default.cfg file values are not to be changed.
 
-  There is no need to recompile the code after changing configurations.  
+  There is no need to recompile the code after changing configurations.
+
+  The configurations can be changed at run-time by reloading the configurations from the menu.  
 
 ###Screenshots###
 <img src="http://i.imgur.com/fAuCq2r.png" width="400" height="300">

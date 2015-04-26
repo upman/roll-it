@@ -28,14 +28,18 @@ void menu(int value){
 	if(value == 1){
 		resetWorld();
 	}
-	else if(value == 2){
+	else if(value == 0){
 		exit(0);
+	}
+	else if(value == 2){
+		readFiles();
 	}
 }
 void createMenu(){
 	glutCreateMenu(menu);
 	glutAddMenuEntry("Reset",1);
-	glutAddMenuEntry("Exit",2);
+	glutAddMenuEntry("Reload Configs",2);
+	glutAddMenuEntry("Exit",0);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 void display()
