@@ -8,21 +8,10 @@ Computer Graphics Course Mini-Project.
 
 ####Requirements installation with apt-get####
 ```
-sudo apt-get install libbox2d-dev
-```
-
-```
-sudo apt-get install freeglut3-dev
-```
-
-```
-sudo apt-get install libconfig++
+sudo apt-get install -y libconfig++-dev freeglut3-dev libbox2d-dev
 ```
 
 ###Build and Run###
-```
-make
-```
 ```
 make run
 ```
@@ -41,26 +30,26 @@ make run
 
   D - Add static triangle at the cursor's location.
 
-  space - Add flat static rotating platform at the cursor's location.
+  Space - Add flat static rotating platform at the cursor's location.
 
-  left-click + drag - Draw a static line.
+  Left-Click + Drag - Draw a static line.
 
   R - Clear all bodies in the world.
   
   Q - Quit
   
-  right-click - Menu to reset world,reload configurations or exit.
+  Right-click - Menu to Reset World, Reload Configurations or Exit.
 
-### Configurations
-  Configurations can be found in the config folder.
+### Configuration
+  Configurations like the world's gravity and friction, restitution, etc. of each of the shapes can be found in the config folder.
 
   The user can change the values in the user.cfg file.
 
-  The default.cfg file values are not to be changed.
+  The default.cfg file values are used as fallback and not to be meddled with.
 
-  There is no need to recompile the code after changing configurations.
+  There is no need to re-compile the code after changing configurations.
 
-  The configurations can be changed at run-time by reloading the configurations from the menu.  
+  The configurations can be changed at run-time by reloading the configurations from the right-click menu.  
 
 ###Screenshots###
 <img src="http://i.imgur.com/fAuCq2r.png" width="400" height="300">
