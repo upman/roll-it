@@ -4,6 +4,7 @@ Computer Graphics Course Mini-Project.
 ##Requirements##
   * Box2D
   * Freeglut
+  * Libconfig++
 
 ####Requirements installation with apt-get####
 ```
@@ -52,8 +53,11 @@ make run
 
 ### Configurations
   Configurations can be found in the config folder.
+
   The user can change the values in the user.cfg file.
+
   The default.cfg file values are not to be changed.
+
   There is no need to recompile the code after changing configurations.  
 
 ###Screenshots###
