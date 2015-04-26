@@ -14,6 +14,10 @@ sudo apt-get install libbox2d-dev
 sudo apt-get install freeglut3-dev
 ```
 
+```
+sudo apt-get install libconfig++
+```
+
 ###Build and Run###
 ```
 make
@@ -51,7 +55,7 @@ make run
   The user can change the values in the user.cfg file.
   The default.cfg file values are not to be changed.
   There is no need to recompile the code after changing configurations.  
-    
+
 ###Screenshots###
 <img src="http://i.imgur.com/fAuCq2r.png" width="400" height="300">
 <img src="http://i.imgur.com/WHoPaON.png" width="400" height="300">
