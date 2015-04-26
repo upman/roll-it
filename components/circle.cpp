@@ -1,5 +1,5 @@
 #include "./headers/circle.h"
-
+#include "./headers/configs.h"
 void addCircle(int x, int y, int r,  b2World* world, bool dyn=true){
   b2BodyDef bodydef;
 	bodydef.position.Set(x*P2M,y*P2M);
@@ -15,8 +15,8 @@ void addCircle(int x, int y, int r,  b2World* world, bool dyn=true){
 
   b2FixtureDef fixturedef;
   fixturedef.shape = &circleShape; //this is a pointer to the shape above
-  fixturedef.friction = 0.00f;
-  fixturedef.restitution = 0.5f;
+  fixturedef.friction = loadConfig("configs","circle","friction");
+  fixturedef.restitution = loadConfig("configs","circle","restitution");
   body->CreateFixture(&fixturedef); //add a fixture to the body
 }
 void draw_pixel(GLint cx, GLint cy)

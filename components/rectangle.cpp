@@ -1,4 +1,5 @@
 #include "./headers/rectangle.h"
+#include "./headers/configs.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -23,7 +24,7 @@ b2Body* addRect(int x,int y,int w,int h, b2World* world, bool dyn=true, bool rot
 
 	b2FixtureDef fixturedef;
 	fixturedef.shape=&shape;
-	fixturedef.density=0.1;
+	fixturedef.density=loadConfig("configs","rectangle","density");
 	body->CreateFixture(&fixturedef);
 }
 

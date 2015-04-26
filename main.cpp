@@ -4,6 +4,7 @@
 #include "./components/headers/circle.h"
 #include "./components/headers/rectangle.h"
 #include "./components/headers/triangle.h"
+#include "./components/headers/configs.h"
 b2World* world;
 
 void init()
@@ -12,14 +13,16 @@ void init()
 	glOrtho(0,WIDTH,HEIGHT,0,-1,1);
 	glMatrixMode(GL_MODELVIEW);
 	glClearColor(0,0,0,1);
-	world=new b2World(b2Vec2(0.0,2.0));
+	float gravity = loadConfig("configs","world","gravity");
+	world=new b2World(b2Vec2(0.0,gravity));
 	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
 }
 
 void resetWorld(){
 	delete world;
-  world = new b2World(b2Vec2(0.0,2.0));
-  addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
+	float gravity = loadConfig("configs","world","gravity");
+  	world = new b2World(b2Vec2(0.0,gravity));
+  	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
 }
 void menu(int value){
 	if(value == 1){
@@ -75,25 +78,33 @@ void display()
 
 void keyboard(unsigned char key, int x, int y){
 	if(key == ' '){
-		addRect(x, y, 100, 20, world, false,true);
+		float width = loadConfig("configs","rectangle","width");
+		float height = loadConfig("configs","rectangle","height");
+		addRect(x, y, width, height, world, false,true);
 	}
 	else if(key == 's'){
-		addRect(x, y, 20, 20, world, true,false);
+		float edge = loadConfig("configs","square","edge");
+		addRect(x, y, edge, edge, world, true,false);
 	}
 	else if(key == 'a'){
-		addCircle(x, y, 20, world, true);
+		float radius = loadConfig("configs","circle","radius");
+		addCircle(x, y, radius, world, true);
 	}
 	else if(key == 'd'){
-		addTriangle(x, y, 4, world, true);
+		float scale = loadConfig("configs","triangle","scale");
+		addTriangle(x, y, scale, world, true);
 	}
 	else if(key == 'S'){
-		addRect(x, y, 20, 20, world, false,false);
+		float edge = loadConfig("configs","square","edge");
+		addRect(x, y, edge, edge, world, false,false);
 	}
 	else if(key == 'A'){
-		addCircle(x, y, 30, world, false);
+		float radius = loadConfig("configs","circle","static-radius");
+		addCircle(x, y, radius, world, false);
 	}
 	else if(key == 'D'){
-		addTriangle(x, y, 4, world, false);
+		float scale = loadConfig("configs","triangle","static-scale");
+		addTriangle(x, y, scale, world, false);
 	}else if(key == 'R'){
 	  resetWorld();
 	}
@@ -119,7 +130,10 @@ int main(int argc,char** argv)
 	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowPosition(0,0);
-	glutInitWindowSize(640,480);
+	readFiles();
+	float window_height = loadConfig("configs","window","height");
+	float window_width = loadConfig("configs","window","width");
+	glutInitWindowSize(window_width,window_height);
 	glutCreateWindow("Roll It");
 	init();
 	createMenu();

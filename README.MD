@@ -45,6 +45,12 @@ make run
   Q - Quit
   
   right-click - Menu to reset or exit.
+
+### Configurations
+  Configurations can be found in the config folder.
+  The user can change the values in the user.cfg file.
+  The default.cfg file values are not to be changed.
+  There is no need to recompile the code after changing configurations.  
     
 ###Screenshots###
 <img src="http://i.imgur.com/fAuCq2r.png" width="400" height="300">

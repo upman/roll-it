@@ -1,5 +1,5 @@
 #include "./headers/triangle.h"
-
+#include "./headers/configs.h"
 b2Body* addTriangle(int cx,int cy, int scale, b2World* world, bool dyn=true)
 {
 	b2BodyDef bodydef;
@@ -20,8 +20,8 @@ b2Body* addTriangle(int cx,int cy, int scale, b2World* world, bool dyn=true)
 	shape.Set(vertices, 3);
 	b2FixtureDef fixturedef;
 	fixturedef.shape=&shape;
-	fixturedef.density=0.5;
-	fixturedef.friction = 0.6;
+	fixturedef.density=loadConfig("configs","triangle","density");
+	fixturedef.friction = loadConfig("configs","triangle","friction");
 	body->CreateFixture(&fixturedef);
 }
 

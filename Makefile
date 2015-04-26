@@ -1,4 +1,4 @@
-LIBS    = -lm -lGL -lGLU -lglut -lBox2D
+LIBS    = -lm -lGL -lGLU -lglut -lBox2D -lconfig++
 FLAGS = -Wall -std=c++11
 
 all : build/app
@@ -15,6 +15,9 @@ build :
 build/main.o : main.cpp
 	$(CXX) -c main.cpp -o build/main.o
 
+build/configs.o : components/configs.cpp
+	$(CXX) -c components/configs.cpp -o build/configs.o
+
 build/triangle.o : components/triangle.cpp
 	$(CXX) -c components/triangle.cpp -o build/triangle.o
 
@@ -24,5 +27,5 @@ build/circle.o : components/circle.cpp
 build/rectangle.o : components/rectangle.cpp
 	$(CXX) -c components/rectangle.cpp -o build/rectangle.o
 
-build/app : build build/main.o build/triangle.o build/circle.o build/rectangle.o
-	cd build &&	$(CXX) main.o triangle.o circle.o rectangle.o $(LIBS) -o app
+build/app : build build/main.o build/triangle.o build/circle.o build/rectangle.o build/configs.o
+	cd build &&	$(CXX) main.o triangle.o circle.o rectangle.o configs.o $(LIBS) -o app
