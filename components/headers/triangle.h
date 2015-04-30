@@ -6,6 +6,6 @@
 #include "../../config/constants.h"
 
 b2Body* addTriangle(int, int, int, b2World*, bool);
-void drawTriangle(b2Vec2*, b2Vec2, float);
+void drawTriangle(b2Vec2*, b2Vec2, float, GLuint);
 
 #endif

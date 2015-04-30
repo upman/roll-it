@@ -8,7 +8,8 @@
 #include "./components/headers/textures.h"
 b2World* world;
 extern GLuint RectTexture;
-
+extern GLuint TriTexture;
+extern GLuint BackTexture;
 void init()
 {
 	glMatrixMode(GL_PROJECTION);
@@ -53,6 +54,17 @@ void display()
 	int rect[] = {20, 20, 64, 64};
 	b2Body* tmp=world->GetBodyList();
 	b2Vec2 points[4];
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, BackTexture);
+	glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glColor3ub(255,255,255);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0.0, 0.0f);	// Bottom Left Of The Texture and Quad
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(640.0f, 0.0f);	// Bottom Right Of The Texture and Quad
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(640.0f, 480.0f);	// Top Right Of The Texture and Quad
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0.0f,  480.0f);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
 	while(tmp)
 	{
 		if(tmp->GetFixtureList()->GetType() ==  b2Shape::e_circle){
@@ -63,7 +75,7 @@ void display()
 			for(int i = 0; i < 3; i++)
 				points[i]=((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertex(i);
 
-			drawTriangle(points, tmp->GetWorldCenter(), tmp->GetAngle());
+			drawTriangle(points, tmp->GetWorldCenter(), tmp->GetAngle(),TriTexture);
 			tmp=tmp->GetNext();
 		}
 		else

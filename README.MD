@@ -5,6 +5,7 @@ Computer Graphics Course Mini-Project.
   * Box2D
   * Freeglut
   * Libconfig++
+  * Libsoil
 
 ####Requirements installation with apt-get####
 ```

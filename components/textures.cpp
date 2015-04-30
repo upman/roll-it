@@ -1,5 +1,7 @@
 #include "./headers/textures.h"
 GLuint RectTexture;
+GLuint TriTexture;
+GLuint BackTexture;
 #include <iostream>
 using namespace std;
 static GLuint LoadTexture(char* filename)
@@ -29,4 +31,6 @@ static GLuint LoadTexture(char* filename)
 
 void LoadAllTextures(){
   RectTexture = LoadTexture((char*)"../img/rectangle.png");
+  TriTexture = LoadTexture((char *)"../img/rectangle.png");
+  BackTexture = LoadTexture((char *)"../img/background.bmp");
 }
