@@ -8,7 +8,7 @@ Computer Graphics Course Mini-Project.
 
 ####Requirements installation with apt-get####
 ```
-sudo apt-get install -y libconfig++-dev freeglut3-dev libbox2d-dev
+sudo apt-get install -y libconfig++-dev freeglut3-dev libbox2d-dev libsoil-dev
 ```
 
 ###Build and Run###
@@ -35,9 +35,9 @@ make run
   Left-Click + Drag - Draw a static line.
 
   R - Clear all bodies in the world.
-  
+
   Q - Quit
-  
+
   Right-click - Menu to Reset World, Reload Configurations or Exit.
 
 ### Configuration

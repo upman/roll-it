@@ -5,7 +5,9 @@
 #include "./components/headers/rectangle.h"
 #include "./components/headers/triangle.h"
 #include "./components/headers/configs.h"
+#include "./components/headers/textures.h"
 b2World* world;
+extern GLuint RectTexture;
 
 void init()
 {
@@ -14,6 +16,7 @@ void init()
 	glMatrixMode(GL_MODELVIEW);
 	glClearColor(0,0,0,1);
 	float gravity = loadConfig("configs","world","gravity");
+	LoadAllTextures();
 	world=new b2World(b2Vec2(0.0,gravity));
 	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
 }
@@ -47,6 +50,7 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT);
 	glFlush();
 	glLoadIdentity();
+	int rect[] = {20, 20, 64, 64};
 	b2Body* tmp=world->GetBodyList();
 	b2Vec2 points[4];
 	while(tmp)
@@ -73,7 +77,7 @@ void display()
   		  for(int i = 0; i < 4; i++)
 	  		  points[i]=((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertex(i);
 
-	  	    drawRect(points,tmp->GetWorldCenter(),tmp->GetAngle());
+	  	    drawRect(points,tmp->GetWorldCenter(),tmp->GetAngle(),RectTexture);
 	  	    tmp=tmp->GetNext();
 	  }
 	}
@@ -145,5 +149,6 @@ int main(int argc,char** argv)
 	glutKeyboardFunc(keyboard);
 	glutMotionFunc(motion);
   	glutIdleFunc(step);
+
 	glutMainLoop();
 }

@@ -1,7 +1,5 @@
 #include "./headers/rectangle.h"
 #include "./headers/configs.h"
-#include <stdlib.h>
-#include <string.h>
 
 b2Body* addRect(int x,int y,int w,int h, b2World* world, bool dyn=true, bool rotate=false)
 {
@@ -28,15 +26,27 @@ b2Body* addRect(int x,int y,int w,int h, b2World* world, bool dyn=true, bool rot
 	body->CreateFixture(&fixturedef);
 }
 
-void drawRect(b2Vec2* points,b2Vec2 center,float angle)
+void drawRect(b2Vec2* points, b2Vec2 center, float angle, GLuint texture)
 {
-	glColor3f(1,1,1);
 	glPushMatrix();
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glColor3ub(255,255,255);
 		glTranslatef(center.x*M2P,center.y*M2P,0);
 		glRotatef(angle*180.0/M_PI,0,0,1);
 		glBegin(GL_QUADS);
-			for(int i=0;i<4;i++)
-				glVertex2f(points[i].x*M2P,points[i].y*M2P);
+		glTexCoord2f(0, 0);
+		glVertex2f(points[0].x*M2P,points[0].y*M2P);
+
+		glTexCoord2f(1, 0);
+		glVertex2f(points[1].x*M2P,points[1].y*M2P);
+
+		glTexCoord2f(1, 1);
+		glVertex2f(points[2].x*M2P,points[2].y*M2P);
+
+		glTexCoord2f(0, 1);
+		glVertex2f(points[3].x*M2P,points[3].y*M2P);
 		glEnd();
 		glFlush();
 	glPopMatrix();
