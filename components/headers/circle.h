@@ -6,6 +6,6 @@
 #include "../../config/constants.h"
 
 void addCircle(int, int, int, b2World*, bool);
-void drawCircle(b2Vec2, float, float);
+void drawCircle(b2Vec2, float, float, GLuint);
 
 #endif

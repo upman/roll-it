@@ -2,6 +2,7 @@
 GLuint RectTexture;
 GLuint TriTexture;
 GLuint BackTexture;
+GLuint CircTexture;
 #include <iostream>
 using namespace std;
 static GLuint LoadTexture(char* filename)
@@ -33,4 +34,5 @@ void LoadAllTextures(){
   RectTexture = LoadTexture((char*)"../img/rectangle.png");
   TriTexture = LoadTexture((char *)"../img/rectangle.png");
   BackTexture = LoadTexture((char *)"../img/background.bmp");
+  CircTexture = LoadTexture((char *)"../img/rectangle.png");
 }

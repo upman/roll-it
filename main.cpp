@@ -10,6 +10,7 @@ b2World* world;
 extern GLuint RectTexture;
 extern GLuint TriTexture;
 extern GLuint BackTexture;
+extern GLuint CircTexture;
 void init()
 {
 	glMatrixMode(GL_PROJECTION);
@@ -68,7 +69,7 @@ void display()
 	while(tmp)
 	{
 		if(tmp->GetFixtureList()->GetType() ==  b2Shape::e_circle){
-	    drawCircle(tmp->GetWorldCenter(), tmp->GetAngle(),((b2CircleShape*)(tmp->GetFixtureList()->GetShape()))->m_radius);
+	    drawCircle(tmp->GetWorldCenter(), tmp->GetAngle(),((b2CircleShape*)(tmp->GetFixtureList()->GetShape()))->m_radius,CircTexture);
 	    tmp=tmp->GetNext();
 	  }
 		else if(((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertexCount() == 3){

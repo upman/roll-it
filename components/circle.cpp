@@ -19,18 +19,28 @@ void addCircle(int x, int y, int r,  b2World* world, bool dyn=true){
   fixturedef.restitution = loadConfig("configs","circle","restitution");
   body->CreateFixture(&fixturedef); //add a fixture to the body
 }
-void drawCircle(b2Vec2 center, float angle, float radius){
+void drawCircle(b2Vec2 center, float angle, float radius,GLuint texture){
 	glPushMatrix();
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, texture);
+  glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+  glColor3ub(255,255,255);
 		glTranslatef(center.x*M2P,center.y*M2P,0);
 		glRotatef(angle*180.0/M_PI,0,0,1);
-		glColor3f(0.0f, 0.0f, 1.0f);  // Blue
 		glBegin(GL_POLYGON);
-    glColor3f(0.0f, 0.0f, 1.0f);  // Blue
-    glVertex2f(0.0f, 0.0f);       // Center of circle
-    int numSegments = 100;
-    for (int i = 0; i <= numSegments; i++) { // Last vertex same as first vertex
-        angle = i * 2.0f * PI / numSegments;  // 360 deg for all segments
-        glVertex2f(cos(angle) * radius*M2P, sin(angle) * radius*M2P);
+    float numSegments,radian,x,y;
+    for (numSegments=0.0; numSegments<360.0; numSegments+=2.0)
+    {
+      radian = numSegments * (M_PI/180.0f);
+
+      float xcos = (float)cos(radian);
+      float ysin = (float)sin(radian);
+      x= xcos*radius;
+      y= ysin*radius;
+      float tx = xcos*0.5 + 0.5;
+      float ty = ysin*0.5 +0.5;
+      glTexCoord2f(tx, ty);
+      glVertex2f(x*M2P, y*M2P);
     }
     glEnd();
 		glFlush();
