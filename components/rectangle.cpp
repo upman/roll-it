@@ -22,7 +22,9 @@ b2Body* addRect(int x,int y,int w,int h, b2World* world, bool dyn=true, bool rot
 
 	b2FixtureDef fixturedef;
 	fixturedef.shape=&shape;
-	fixturedef.density=loadConfig("configs","rectangle","density");
+	fixturedef.density = loadConfig("configs","rectangle","density");
+	fixturedef.restitution = loadConfig("configs","rectangle","restitution");
+	fixturedef.friction = loadConfig("configs","rectangle","friction");
 	body->CreateFixture(&fixturedef);
 }
 

@@ -22,6 +22,7 @@ b2Body* addTriangle(int cx,int cy, int scale, b2World* world, bool dyn=true)
 	fixturedef.shape=&shape;
 	fixturedef.density=loadConfig("configs","triangle","density");
 	fixturedef.friction = loadConfig("configs","triangle","friction");
+	fixturedef.restitution = loadConfig("configs","triangle","restitution");
 	body->CreateFixture(&fixturedef);
 }
 

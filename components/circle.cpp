@@ -17,6 +17,7 @@ void addCircle(int x, int y, int r,  b2World* world, bool dyn=true){
   fixturedef.shape = &circleShape; //this is a pointer to the shape above
   fixturedef.friction = loadConfig("configs","circle","friction");
   fixturedef.restitution = loadConfig("configs","circle","restitution");
+  fixturedef.density = loadConfig("configs","circle","friction");
   body->CreateFixture(&fixturedef); //add a fixture to the body
 }
 void drawCircle(b2Vec2 center, float angle, float radius,GLuint texture){
