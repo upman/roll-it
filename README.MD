@@ -24,6 +24,7 @@ make run
 
   d - Add dynamic triangle at the cursor's location.
 
+  p - Screenshot, screenshots are saved in screenshots folder.
 
   A - Add static(immovable) circle at the cursor's location.
 

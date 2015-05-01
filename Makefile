@@ -10,8 +10,9 @@ run : build/app
 	cd build && ./app
 
 build :
-	mkdir build
-
+	mkdir build 
+screenshots:
+	mkdir screenshots
 build/main.o : main.cpp
 	$(CXX) -c main.cpp -o build/main.o
 
@@ -30,5 +31,5 @@ build/rectangle.o : components/rectangle.cpp
 build/textures.o : components/textures.cpp
 	$(CXX) -c components/textures.cpp -o build/textures.o
 
-build/app : build build/main.o build/triangle.o build/circle.o build/rectangle.o build/configs.o build/textures.o
+build/app : build screenshots build/main.o build/triangle.o build/circle.o build/rectangle.o build/configs.o build/textures.o
 	cd build &&	$(CXX) main.o triangle.o circle.o rectangle.o configs.o textures.o $(LIBS) -o app

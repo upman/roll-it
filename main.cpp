@@ -132,6 +132,9 @@ void keyboard(unsigned char key, int x, int y){
 	else if(key == 'Q'){
 		exit(0);
 	}
+	else if(key == 'p'){
+		screenshot();
+	}
 }
 
 void motion(int x, int y){

@@ -6,4 +6,5 @@
   using namespace std;
   static GLuint LoadTexture(char*);
   void LoadAllTextures(void);
+  void screenshot(void);
 #endif
