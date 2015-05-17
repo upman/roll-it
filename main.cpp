@@ -20,8 +20,8 @@ extern GLuint CircTexture;
 void resetWorld(){
 	delete world;
 	float gravity = loadConfig("configs","world","gravity");
-  	world = new b2World(b2Vec2(0.0,gravity));
-  	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
+	world = new b2World(b2Vec2(0.0,gravity));
+	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
 }
 
 void menu(int value){
@@ -47,33 +47,31 @@ void createMenu(){
 void renderWorld(){
 	b2Body* tmp=world->GetBodyList();
 	b2Vec2 points[4];
-	while(tmp)
-	{
+	while(tmp){
 		if(tmp->GetFixtureList()->GetType() ==  b2Shape::e_circle){
-	    drawCircle(tmp->GetWorldCenter(), tmp->GetAngle(),((b2CircleShape*)(tmp->GetFixtureList()->GetShape()))->m_radius,CircTexture);
-	    tmp=tmp->GetNext();
-	  }
+			drawCircle(tmp->GetWorldCenter(), tmp->GetAngle(),((b2CircleShape*)(tmp->GetFixtureList()->GetShape()))->m_radius,CircTexture);
+			tmp=tmp->GetNext();
+		}
 		else if(((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertexCount() == 3){
 			for(int i = 0; i < 3; i++)
-				points[i]=((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertex(i);
+			points[i]=((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertex(i);
 
 			drawTriangle(points, tmp->GetWorldCenter(), tmp->GetAngle(),TriTexture);
 			tmp=tmp->GetNext();
 		}
-		else
-		{
+		else{
 			if(tmp->GetUserData()){
-					if(strcmp((char*)tmp->GetUserData(),"rotate")){
-						tmp->SetTransform(tmp->GetPosition(),(tmp->GetAngle()+0.01f));
-						//increase angle by 0.009 radians at every step
-					}
+				if(strcmp((char*)tmp->GetUserData(),"rotate")){
+					tmp->SetTransform(tmp->GetPosition(),(tmp->GetAngle()+0.01f));
+					//increase angle by 0.009 radians at every step
 				}
-  		  for(int i = 0; i < 4; i++)
-	  		  points[i]=((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertex(i);
+			}
+			for(int i = 0; i < 4; i++)
+			points[i]=((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertex(i);
 
-	  	    drawRect(points,tmp->GetWorldCenter(),tmp->GetAngle(),RectTexture);
-	  	    tmp=tmp->GetNext();
-	  }
+			drawRect(points,tmp->GetWorldCenter(),tmp->GetAngle(),RectTexture);
+			tmp=tmp->GetNext();
+		}
 	}
 }
 
@@ -91,8 +89,7 @@ void renderBackground(){
 	glDisable(GL_TEXTURE_2D);
 }
 
-void display()
-{
+void display(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	glFlush();
 	glLoadIdentity();
@@ -141,7 +138,7 @@ void keyboard(unsigned char key, int x, int y){
 		addTriangle(x, y, scale, world, false);
 	}
 	else if(key == 'R'){
-	  resetWorld();
+		resetWorld();
 	}
 	else if(key == 'Q'){
 		exit(0);
@@ -152,15 +149,14 @@ void keyboard(unsigned char key, int x, int y){
 	else if(key == 'i'){
 		switchToIntro();
 	}
-
 }
 
 class WorldQueryCallback : public b2QueryCallback {
-  public:
-      bool ReportFixture(b2Fixture* fixture) {
-					selectedBody=fixture->GetBody();
-          return false;//Stop after finding the first fixture
-      }
+public:
+	bool ReportFixture(b2Fixture* fixture) {
+		selectedBody=fixture->GetBody();
+		return false;//Stop after finding the first fixture
+	}
 };
 
 void mouse(int button, int state, int x, int y){
@@ -200,15 +196,14 @@ void motion(int x, int y){
 }
 
 void step(){
-  float m=glutGet(GLUT_ELAPSED_TIME)/(1.0/30.0);
-  if(floor(m)==m){//If the time is a multiple of 1/30 th of a second, redisplay
-    world->Step(1.0/30.0,8,3);
-    glutPostRedisplay();
-  }
+	float m=glutGet(GLUT_ELAPSED_TIME)/(1.0/30.0);
+	if(floor(m)==m){//If the time is a multiple of 1/30 th of a second, redisplay
+		world->Step(1.0/30.0,8,3);
+		glutPostRedisplay();
+	}
 }
 
-void init()
-{
+void init(){
 	glMatrixMode(GL_PROJECTION);
 	glOrtho(0,WIDTH,HEIGHT,0,-1,1);
 	glMatrixMode(GL_MODELVIEW);
@@ -225,29 +220,28 @@ void init()
 }
 
 void switchToSimulation(){
-		glutKeyboardFunc(keyboard);
-		glutMouseFunc(mouse);
-		glutMotionFunc(motion);
-		glutIdleFunc(step);
-		introScreenFlag = 0;
+	glutKeyboardFunc(keyboard);
+	glutMouseFunc(mouse);
+	glutMotionFunc(motion);
+	glutIdleFunc(step);
+	introScreenFlag = 0;
 }
 
 void switchToIntro(){
-		glutKeyboardFunc(introKeyboard);
-		glutMouseFunc(NULL);
-		glutMotionFunc(NULL);
-		glutIdleFunc(NULL);
-		introScreenFlag = 1;
+	glutKeyboardFunc(introKeyboard);
+	glutMouseFunc(NULL);
+	glutMotionFunc(NULL);
+	glutIdleFunc(NULL);
+	introScreenFlag = 1;
 }
 
 void introKeyboard(unsigned char key, int x, int y){
-		if(key==' '){
-			switchToSimulation();
-		}
+	if(key==' '){
+		switchToSimulation();
+	}
 }
 
-int main(int argc,char** argv)
-{
+int main(int argc,char** argv){
 	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowPosition(0,0);
