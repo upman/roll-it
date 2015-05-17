@@ -94,17 +94,20 @@ void renderBackground(){
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 }
-
+void loadInstructions(){
+		glPushMatrix();
+		//glTranslatef(100,0,0);
+		font->FaceSize(50);
+		font->Render("2D World Simulator",-1,FTPoint(WIDTH/3, HEIGHT/1.25, 0));
+		font->Render("Instructions",-1,FTPoint(WIDTH/2.5,HEIGHT/1.4,0));
+		glPopMatrix();
+}
 void display(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	glLoadIdentity();
 	renderBackground();
 	if(introScreenFlag){
-		glPushMatrix();
-		glTranslatef(100,0,0);
-		font->FaceSize(50);
-		font->Render("Awesome intro screen",-1,FTPoint(0, 300, 0));
-		glPopMatrix();
+		loadInstructions();
 	}
 	else{
 		renderWorld();
@@ -301,6 +304,7 @@ void init(){
 	float gravity = loadConfig("configs","world","gravity");
 	world=new b2World(b2Vec2(0.0,gravity));
 	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false);
+	glutPostRedisplay();
 }
 
 void switchToSimulation(){
@@ -340,7 +344,5 @@ int main(int argc,char** argv){
 	createMenu();
 	glutDisplayFunc(display);
 	glutKeyboardFunc(introKeyboard);
-	//TODO:Fix
-	display();//Doesn't seem to work without this explicit call to display
 	glutMainLoop();
 }
