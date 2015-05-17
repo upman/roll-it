@@ -7,6 +7,7 @@
 #include "./components/headers/triangle.h"
 #include "./components/headers/configs.h"
 #include "./components/headers/textures.h"
+#include "./components/headers/main.h"
 b2World* world;
 b2Body* selectedBody;
 FTGLPixmapFont* font;
@@ -138,7 +139,8 @@ void keyboard(unsigned char key, int x, int y){
 	else if(key == 'D'){
 		float scale = loadConfig("configs","triangle","static-scale");
 		addTriangle(x, y, scale, world, false);
-	}else if(key == 'R'){
+	}
+	else if(key == 'R'){
 	  resetWorld();
 	}
 	else if(key == 'Q'){
@@ -147,6 +149,10 @@ void keyboard(unsigned char key, int x, int y){
 	else if(key == 'p'){
 		screenshot();
 	}
+	else if(key == 'i'){
+		switchToIntro();
+	}
+
 }
 
 class WorldQueryCallback : public b2QueryCallback {
@@ -208,30 +214,35 @@ void init()
 	glMatrixMode(GL_MODELVIEW);
 	glClearColor(0,0,0,1);
 	LoadAllTextures();
-}
-
-void initSimulation(){
+	font = new FTGLPixmapFont("../fonts/chawp.ttf");
+	if(font->Error()){
+		printf("\nError loading font!\n");
+		exit(0);
+	}
 	float gravity = loadConfig("configs","world","gravity");
 	world=new b2World(b2Vec2(0.0,gravity));
 	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
-	glutKeyboardFunc(keyboard);
-	glutMouseFunc(mouse);
-	glutMotionFunc(motion);
-	glutIdleFunc(step);
 }
 
-void initIntro(){
-		font = new FTGLPixmapFont("../fonts/chawp.ttf");
-		if(font->Error()){
-			printf("\nError loading font!\n");
-			exit(0);
-		}
+void switchToSimulation(){
+		glutKeyboardFunc(keyboard);
+		glutMouseFunc(mouse);
+		glutMotionFunc(motion);
+		glutIdleFunc(step);
+		introScreenFlag = 0;
+}
+
+void switchToIntro(){
+		glutKeyboardFunc(introKeyboard);
+		glutMouseFunc(NULL);
+		glutMotionFunc(NULL);
+		glutIdleFunc(NULL);
+		introScreenFlag = 1;
 }
 
 void introKeyboard(unsigned char key, int x, int y){
 		if(key==' '){
-			initSimulation();
-			introScreenFlag=0;
+			switchToSimulation();
 		}
 }
 
@@ -247,7 +258,7 @@ int main(int argc,char** argv)
 	glutInitWindowSize(window_width,window_height);
 	glutCreateWindow("Roll It");
 	init();
-	initIntro();
+	switchToIntro();
 	createMenu();
 	glutDisplayFunc(display);
 	glutKeyboardFunc(introKeyboard);
