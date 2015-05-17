@@ -248,6 +248,7 @@ void motion(int x, int y){
 	windowToWorld(&x,&y);
 	if(selectedBody){
 		selectedBody->SetTransform(b2Vec2(x*P2M,y*P2M),selectedBody->GetAngle());
+		selectedBody->SetAwake(false);
 	}
 	else{
 		addRect(x,y,1,1, world, false, false);
