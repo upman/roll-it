@@ -41,6 +41,10 @@ make run
 
   \- - Decrease size of the body that's currently being held with the mouse
 
+  r - Rotate body being held by the mouse
+
+  t - Toggle the type of the body being held by the mouse between static and dynamic
+
   R - Clear all bodies in the world.
 
   Q - Quit

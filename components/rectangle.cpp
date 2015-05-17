@@ -1,7 +1,7 @@
 #include "./headers/rectangle.h"
 #include "./headers/configs.h"
 
-b2Body* addRect(int x,int y,int w,int h, b2World* world, bool dyn=true, bool rotate=false)
+b2Body* addRect(int x,int y,int w,int h, b2World* world, bool dyn=true)
 {
 	b2BodyDef bodydef;
 	bodydef.position.Set(x*P2M,y*P2M);
@@ -11,11 +11,6 @@ b2Body* addRect(int x,int y,int w,int h, b2World* world, bool dyn=true, bool rot
 	  bodydef.type=b2_staticBody;
 
 	b2Body* body=world->CreateBody(&bodydef);
-	if(rotate){
-		char *type = (char*)malloc(10);
-		strcpy(type,"rotator");
-		body->SetUserData((void*)type);
-	}
 
 	b2PolygonShape shape;
 	shape.SetAsBox(P2M*w/2,P2M*h/2);

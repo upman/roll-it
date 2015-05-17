@@ -12,6 +12,7 @@ b2World* world;
 b2Body* selectedBody;
 FTGLPixmapFont* font;
 int introScreenFlag=1;
+char rotateflag = 'r';
 int WIDTH,HEIGHT;
 extern GLuint RectTexture;
 extern GLuint TriTexture;
@@ -22,7 +23,7 @@ void resetWorld(){
 	delete world;
 	float gravity = loadConfig("configs","world","gravity");
 	world = new b2World(b2Vec2(0.0,gravity));
-	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
+	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false);
 }
 
 void menu(int value){
@@ -49,6 +50,16 @@ void renderWorld(){
 	b2Body* tmp=world->GetBodyList();
 	b2Vec2 points[4];
 	while(tmp){
+		if(tmp->GetUserData()){
+			if((*(char*)tmp->GetUserData()) == rotateflag){
+				if(tmp->GetType() == b2_dynamicBody)
+					tmp->SetAngularVelocity(0.5f);
+				else
+					tmp->SetTransform(tmp->GetPosition(),(tmp->GetAngle()+0.01f));
+				//increase angle by 0.01 radians at every step
+			}
+		}
+
 		if(tmp->GetFixtureList()->GetType() ==  b2Shape::e_circle){
 			drawCircle(tmp->GetWorldCenter(), tmp->GetAngle(),((b2CircleShape*)(tmp->GetFixtureList()->GetShape()))->m_radius,CircTexture);
 			tmp=tmp->GetNext();
@@ -61,12 +72,6 @@ void renderWorld(){
 			tmp=tmp->GetNext();
 		}
 		else{
-			if(tmp->GetUserData()){
-				if(strcmp((char*)tmp->GetUserData(),"rotate")){
-					tmp->SetTransform(tmp->GetPosition(),(tmp->GetAngle()+0.01f));
-					//increase angle by 0.009 radians at every step
-				}
-			}
 			for(int i = 0; i < 4; i++)
 			points[i]=((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertex(i);
 
@@ -134,11 +139,11 @@ void keyboard(unsigned char key, int x, int y){
 	if(key == ' '){
 		float width = loadConfig("configs","rectangle","width");
 		float height = loadConfig("configs","rectangle","height");
-		addRect(x, y, width, height, world, false,true);
+		addRect(x, y, width, height, world, false);
 	}
 	else if(key == 's'){
 		float edge = loadConfig("configs","square","edge");
-		addRect(x, y, edge, edge, world, true,false);
+		addRect(x, y, edge, edge, world, true);
 	}
 	else if(key == 'a'){
 		float radius = loadConfig("configs","circle","radius");
@@ -150,7 +155,7 @@ void keyboard(unsigned char key, int x, int y){
 	}
 	else if(key == 'S'){
 		float edge = loadConfig("configs","square","edge");
-		addRect(x, y, edge, edge, world, false,false);
+		addRect(x, y, edge, edge, world, false);
 	}
 	else if(key == 'A'){
 		float radius = loadConfig("configs","circle","static-radius");
@@ -184,6 +189,16 @@ void keyboard(unsigned char key, int x, int y){
 				selectedBody->SetType(b2_staticBody);
 			else
 				selectedBody->SetType(b2_dynamicBody);
+		}
+	}
+	else if(key == 'r'){
+		if(selectedBody){
+			if(selectedBody->GetUserData()){
+				selectedBody->SetUserData(NULL);
+			}
+			else{
+				selectedBody->SetUserData(&rotateflag);
+			}
 		}
 	}
 }
@@ -259,7 +274,7 @@ void motion(int x, int y){
 		selectedBody->SetAwake(false);
 	}
 	else{
-		addRect(x,y,1,1, world, false, false);
+		addRect(x,y,1,1, world, false);
 	}
 }
 
@@ -285,7 +300,7 @@ void init(){
 	}
 	float gravity = loadConfig("configs","world","gravity");
 	world=new b2World(b2Vec2(0.0,gravity));
-	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
+	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false);
 }
 
 void switchToSimulation(){
