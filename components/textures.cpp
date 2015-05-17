@@ -79,6 +79,6 @@ void screenshot(){
 	(
 		name,
 		SOIL_SAVE_TYPE_BMP,
-		0, 0, 640, 480
+		0, 0, 1360, 768
 	);
 }

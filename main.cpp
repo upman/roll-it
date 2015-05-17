@@ -25,7 +25,6 @@ void resetWorld(){
 	world = new b2World(b2Vec2(0.0,gravity));
 	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false);
 }
-
 void menu(int value){
 	if(value == 1){
 		resetWorld();
@@ -357,7 +356,6 @@ int main(int argc,char** argv){
 	readFiles();
 	WIDTH = (int)loadConfig("configs","window","width");
 	HEIGHT = (int)loadConfig("configs","window","height");
-	font = new FTGLPixmapFont("../fonts/chawp.ttf");
 	glutInitWindowSize(WIDTH,HEIGHT);
 	glutCreateWindow("Roll It");
 	init();
