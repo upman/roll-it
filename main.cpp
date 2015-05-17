@@ -178,6 +178,14 @@ void keyboard(unsigned char key, int x, int y){
 	else if(key == '-'){
 		scaleSelectedBody(1.0/1.1);
 	}
+	else if(key == 't'){
+		if(selectedBody){
+			if(selectedBody->GetType() == b2_dynamicBody)
+				selectedBody->SetType(b2_staticBody);
+			else
+				selectedBody->SetType(b2_dynamicBody);
+		}
+	}
 }
 
 void scaleSelectedBody(float scalingFactor){
