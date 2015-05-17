@@ -91,7 +91,6 @@ void renderBackground(){
 
 void display(){
 	glClear(GL_COLOR_BUFFER_BIT);
-	glFlush();
 	glLoadIdentity();
 	renderBackground();
 	if(introScreenFlag){
@@ -209,6 +208,7 @@ void init(){
 	glMatrixMode(GL_MODELVIEW);
 	glClearColor(0,0,0,1);
 	LoadAllTextures();
+	computeCircleVertices();
 	font = new FTGLPixmapFont("../fonts/chawp.ttf");
 	if(font->Error()){
 		printf("\nError loading font!\n");

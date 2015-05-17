@@ -1,5 +1,8 @@
 #include "./headers/circle.h"
 #include "./headers/configs.h"
+GLfloat vertices[360][3];
+GLfloat textureCoords[360][3];
+
 void addCircle(int x, int y, int r,  b2World* world, bool dyn=true){
   b2BodyDef bodydef;
 	bodydef.position.Set(x*P2M,y*P2M);
@@ -28,22 +31,34 @@ void drawCircle(b2Vec2 center, float angle, float radius,GLuint texture){
   glColor3ub(255,255,255);
 		glTranslatef(center.x*M2P,center.y*M2P,0);
 		glRotatef(angle*180.0/M_PI,0,0,1);
-		glBegin(GL_POLYGON);
-    float numSegments,radian,x,y;
-    for (numSegments=0.0; numSegments<360.0; numSegments+=2.0)
-    {
-      radian = numSegments * (M_PI/180.0f);
-
-      float xcos = (float)cos(radian);
-      float ysin = (float)sin(radian);
-      x= xcos*radius;
-      y= ysin*radius;
-      float tx = xcos*0.5 + 0.5;
-      float ty = ysin*0.5 +0.5;
-      glTexCoord2f(tx, ty);
-      glVertex2f(x*M2P, y*M2P);
-    }
-    glEnd();
+    glScalef(radius*M2P,radius*M2P,0);
+      glDrawArrays(GL_POLYGON, 0, 360);
 		glFlush();
 	glPopMatrix();
+}
+
+void computeCircleVertices(){
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  float numSegments,radian,x,y;
+  for (numSegments=0.0; numSegments<360.0; numSegments+=1.0)
+  {
+    radian = numSegments * (M_PI/180.0f);
+
+    float xcos = (float)cos(radian);
+    float ysin = (float)sin(radian);
+    x= xcos;
+    y= ysin;
+    float tx = xcos*0.5 + 0.5;
+    float ty = ysin*0.5 +0.5;
+    textureCoords[(int)numSegments][0] = tx;
+    textureCoords[(int)numSegments][1] = ty;
+    textureCoords[(int)numSegments][2] = 0;
+
+    vertices[(int)numSegments][0] = x;
+    vertices[(int)numSegments][1] = y;
+    vertices[(int)numSegments][2] = 0;
+  }
+  glVertexPointer(3, GL_FLOAT, 0, vertices);
+  glTexCoordPointer(3,GL_FLOAT,0,textureCoords);
 }
