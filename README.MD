@@ -33,6 +33,8 @@ make run
 
   D - Add static triangle at the cursor's location.
 
+  b - To Begin simulation
+
   Space - Add flat static rotating platform at the cursor's location.
 
   Left-Click + Drag - Draw a static line or pickup object if click is on an object
@@ -44,6 +46,8 @@ make run
   r - Rotate body being held by the mouse
 
   t - Toggle the type of the body being held by the mouse between static and dynamic
+
+  i - To View Instructions
 
   R - Clear all bodies in the world.
 

@@ -47,6 +47,8 @@ void createMenu(){
 }
 
 void renderWorld(){
+	font->FaceSize(25);
+	font->Render("Press i to view Instructions",-1,FTPoint(WIDTH/1.25,HEIGHT/1.2,0));
 	b2Body* tmp=world->GetBodyList();
 	b2Vec2 points[4];
 	while(tmp){
@@ -98,8 +100,27 @@ void loadInstructions(){
 		glPushMatrix();
 		//glTranslatef(100,0,0);
 		font->FaceSize(50);
-		font->Render("2D World Simulator",-1,FTPoint(WIDTH/3, HEIGHT/1.25, 0));
-		font->Render("Instructions",-1,FTPoint(WIDTH/2.5,HEIGHT/1.4,0));
+		font->Render("2D WORLD SIMULATOR",-1,FTPoint(WIDTH/3, HEIGHT/1.25, 0));
+		font->Render("By",-1,FTPoint(WIDTH/2,HEIGHT/1.4,0));
+		font->Render("Ranadip Saha",-1,FTPoint(WIDTH/4,HEIGHT/1.6,0));
+		font->Render("And",-1,FTPoint(WIDTH/2.05,HEIGHT/1.6,0));
+		font->Render("Ravi Kumar L",-1,FTPoint(WIDTH/1.75,HEIGHT/1.6,0));
+		font->Render("INSTRUCTIONS",-1,FTPoint(WIDTH/2.5,HEIGHT/1.8,0));
+		font->FaceSize(25);
+		float start_height = HEIGHT/2.0;
+		font->Render("A or a - Add Static or Dynamic Circle",-1,FTPoint(WIDTH/15,start_height,0));
+		font->Render("S or s - Add Static or Dynamic Square",-1,FTPoint(WIDTH/15,start_height-30.0,0));
+		font->Render("D or d - Add Static or Dynamic Triangle",-1,FTPoint(WIDTH/15,start_height-60.0,0));
+		font->Render("p - To save screenshot of the simulation",-1,FTPoint(WIDTH/15,start_height-90.0,0));
+		font->Render("b - To Begin the simulator",-1,FTPoint(WIDTH/15,start_height-120.0,0.0));
+		font->Render("Left-Click + Drag - Draw a static line or pickup object if click is on an object",-1,FTPoint(WIDTH/15,start_height-150.0,0.0));
+		font->Render("+ - Increase size of the body that is currently being held with the mouse",-1,FTPoint(WIDTH/15,start_height-180.0,0.0));
+		font->Render("- - Decrease size of the body that is currently being held with the mouse",-1,FTPoint(WIDTH/15,start_height-210.0,0.0));
+		font->Render("r - Rotate body being held by the mouse",-1,FTPoint(WIDTH/15,start_height-240.0,0.0));
+		font->Render("t - Toggle the type of the body being held by the mouse between static and dynamic",-1,FTPoint(WIDTH/15,start_height-270.0,0.0));
+		font->Render("R - Clear all bodies in the world.",-1,FTPoint(WIDTH/15,start_height-300.0,0));
+		font->Render("Q - Quit",-1,FTPoint(WIDTH/15,start_height-330.0,0));
+		font->Render("Right-click - Menu to Reset World, Reload Configurations or Exit.",-1,FTPoint(WIDTH/15,start_height-360.0,0));
 		glPopMatrix();
 }
 void display(){
@@ -296,7 +317,7 @@ void init(){
 	glClearColor(0,0,0,1);
 	LoadAllTextures();
 	computeCircleVertices();
-	font = new FTGLPixmapFont("../fonts/chawp.ttf");
+	font = new FTGLPixmapFont("../fonts/Chalk3.ttf");
 	if(font->Error()){
 		printf("\nError loading font!\n");
 		exit(0);
@@ -324,7 +345,7 @@ void switchToIntro(){
 }
 
 void introKeyboard(unsigned char key, int x, int y){
-	if(key==' '){
+	if(key=='b'){
 		switchToSimulation();
 	}
 }
