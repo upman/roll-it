@@ -1,6 +1,7 @@
 #include <GL/glut.h>
 #include <Box2D/Box2D.h>
 #include <string.h>
+#include <FTGL/ftgl.h>
 #include "./components/headers/circle.h"
 #include "./components/headers/rectangle.h"
 #include "./components/headers/triangle.h"
@@ -8,21 +9,12 @@
 #include "./components/headers/textures.h"
 b2World* world;
 b2Body* selectedBody;
+FTGLPixmapFont* font;
+int introScreenFlag=1;
 extern GLuint RectTexture;
 extern GLuint TriTexture;
 extern GLuint BackTexture;
 extern GLuint CircTexture;
-void init()
-{
-	glMatrixMode(GL_PROJECTION);
-	glOrtho(0,WIDTH,HEIGHT,0,-1,1);
-	glMatrixMode(GL_MODELVIEW);
-	glClearColor(0,0,0,1);
-	float gravity = loadConfig("configs","world","gravity");
-	LoadAllTextures();
-	world=new b2World(b2Vec2(0.0,gravity));
-	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
-}
 
 void resetWorld(){
 	delete world;
@@ -30,6 +22,7 @@ void resetWorld(){
   	world = new b2World(b2Vec2(0.0,gravity));
   	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
 }
+
 void menu(int value){
 	if(value == 1){
 		resetWorld();
@@ -41,6 +34,7 @@ void menu(int value){
 		readFiles();
 	}
 }
+
 void createMenu(){
 	glutCreateMenu(menu);
 	glutAddMenuEntry("Reset",1);
@@ -48,25 +42,10 @@ void createMenu(){
 	glutAddMenuEntry("Exit",0);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
-void display()
-{
-	glClear(GL_COLOR_BUFFER_BIT);
-	glFlush();
-	glLoadIdentity();
-	int rect[] = {20, 20, 64, 64};
+
+void renderWorld(){
 	b2Body* tmp=world->GetBodyList();
 	b2Vec2 points[4];
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, BackTexture);
-	glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-	glColor3ub(255,255,255);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(0.0, 0.0f);	// Bottom Left Of The Texture and Quad
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(640.0f, 0.0f);	// Bottom Right Of The Texture and Quad
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(640.0f, 480.0f);	// Top Right Of The Texture and Quad
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(0.0f,  480.0f);
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
 	while(tmp)
 	{
 		if(tmp->GetFixtureList()->GetType() ==  b2Shape::e_circle){
@@ -95,7 +74,39 @@ void display()
 	  	    tmp=tmp->GetNext();
 	  }
 	}
-		glutSwapBuffers();
+}
+
+void renderBackground(){
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, BackTexture);
+	glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glColor3ub(255,255,255);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0.0, 0.0f);	// Bottom Left Of The Texture and Quad
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(640.0f, 0.0f);	// Bottom Right Of The Texture and Quad
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(640.0f, 480.0f);	// Top Right Of The Texture and Quad
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0.0f,  480.0f);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
+void display()
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	glFlush();
+	glLoadIdentity();
+	renderBackground();
+	if(introScreenFlag){
+		glPushMatrix();
+		glTranslatef(100,0,0);
+		font->FaceSize(50);
+		font->Render("Awesome intro screen",-1,FTPoint(0, 300, 0));
+		glPopMatrix();
+	}
+	else{
+		renderWorld();
+	}
+	glutSwapBuffers();
 }
 
 void keyboard(unsigned char key, int x, int y){
@@ -190,6 +201,40 @@ void step(){
   }
 }
 
+void init()
+{
+	glMatrixMode(GL_PROJECTION);
+	glOrtho(0,WIDTH,HEIGHT,0,-1,1);
+	glMatrixMode(GL_MODELVIEW);
+	glClearColor(0,0,0,1);
+	LoadAllTextures();
+}
+
+void initSimulation(){
+	float gravity = loadConfig("configs","world","gravity");
+	world=new b2World(b2Vec2(0.0,gravity));
+	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false,false);
+	glutKeyboardFunc(keyboard);
+	glutMouseFunc(mouse);
+	glutMotionFunc(motion);
+	glutIdleFunc(step);
+}
+
+void initIntro(){
+		font = new FTGLPixmapFont("../fonts/chawp.ttf");
+		if(font->Error()){
+			printf("\nError loading font!\n");
+			exit(0);
+		}
+}
+
+void introKeyboard(unsigned char key, int x, int y){
+		if(key==' '){
+			initSimulation();
+			introScreenFlag=0;
+		}
+}
+
 int main(int argc,char** argv)
 {
 	glutInit(&argc,argv);
@@ -198,14 +243,15 @@ int main(int argc,char** argv)
 	readFiles();
 	float window_height = loadConfig("configs","window","height");
 	float window_width = loadConfig("configs","window","width");
+	font = new FTGLPixmapFont("../fonts/chawp.ttf");
 	glutInitWindowSize(window_width,window_height);
 	glutCreateWindow("Roll It");
 	init();
+	initIntro();
 	createMenu();
 	glutDisplayFunc(display);
-	glutKeyboardFunc(keyboard);
-	glutMouseFunc(mouse);
-	glutMotionFunc(motion);
-  glutIdleFunc(step);
+	glutKeyboardFunc(introKeyboard);
+	//TODO:Fix
+	display();//Doesn't seem to work without this explicit call to display
 	glutMainLoop();
 }

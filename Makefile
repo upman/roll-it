@@ -1,4 +1,5 @@
-LIBS    = -lm -lGL -lGLU -lglut -lBox2D -lconfig++ -lSOIL
+LIBS    = -lm -lGL -lGLU -lglut -lBox2D -lconfig++ -lSOIL $(shell pkg-config --libs ftgl)
+INCLUDES = $(shell pkg-config --cflags ftgl)
 FLAGS = -Wall -std=c++11
 
 all : build/app
@@ -10,11 +11,11 @@ run : build/app
 	cd build && ./app
 
 build :
-	mkdir build 
+	mkdir build
 screenshots:
 	mkdir screenshots
 build/main.o : main.cpp
-	$(CXX) -c main.cpp -o build/main.o
+	$(CXX) -c main.cpp -o build/main.o $(INCLUDES)
 
 build/configs.o : components/configs.cpp
 	$(CXX) -c components/configs.cpp -o build/configs.o
