@@ -172,6 +172,43 @@ void keyboard(unsigned char key, int x, int y){
 	else if(key == 'i'){
 		switchToIntro();
 	}
+	else if(key == '+'){
+		scaleSelectedBody(1.1);
+	}
+	else if(key == '-'){
+		scaleSelectedBody(1.0/1.1);
+	}
+}
+
+void scaleSelectedBody(float scalingFactor){
+	if(!selectedBody){
+		return;
+	}
+
+	if( selectedBody->GetFixtureList()->GetType() ==  b2Shape::e_circle){
+		selectedBody->GetFixtureList()->GetShape()->m_radius*=scalingFactor;
+	}
+	else{
+		b2PolygonShape* shape = (b2PolygonShape*)selectedBody->GetFixtureList()->GetShape();
+		int vertexCount = shape->GetVertexCount();
+		b2Vec2 vertices[vertexCount];
+		for(int i=0; i<vertexCount; i++){
+			vertices[i] = shape->GetVertex(i);
+			vertices[i]*=scalingFactor;
+		}
+		b2PolygonShape newShape;
+		newShape.Set(vertices, vertexCount);
+
+		b2Fixture* fixture = selectedBody->GetFixtureList();
+		b2FixtureDef newFixture;
+		newFixture.shape = &newShape;
+		newFixture.density = fixture->GetDensity();
+		newFixture.friction = fixture->GetFriction();
+		newFixture.restitution = fixture->GetRestitution();
+
+		selectedBody->DestroyFixture(fixture);
+		selectedBody->CreateFixture(&newFixture);
+	}
 }
 
 class WorldQueryCallback : public b2QueryCallback {

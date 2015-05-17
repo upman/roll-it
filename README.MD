@@ -37,11 +37,17 @@ make run
 
   Left-Click + Drag - Draw a static line or pickup object if click is on an object
 
+  \+ - Increase size of the body that's currently being held with the mouse
+
+  \- - Decrease size of the body that's currently being held with the mouse
+
   R - Clear all bodies in the world.
 
   Q - Quit
 
   Right-click - Menu to Reset World, Reload Configurations or Exit.
+
+
 
 ### Configuration
   Configurations like the world's gravity and friction, restitution, etc. of each of the shapes can be found in the config folder.

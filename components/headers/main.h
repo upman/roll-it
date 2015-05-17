@@ -12,3 +12,4 @@ void init();
 void switchToSimulation();
 void switchToIntro();
 void introKeyboard(unsigned char, int, int);
+void scaleSelectedBody(float);
