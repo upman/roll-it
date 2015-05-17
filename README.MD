@@ -4,8 +4,9 @@ Computer Graphics Course Mini-Project.
 ##Requirements##
   * Box2D
   * Freeglut
-  * Libconfig++
-  * Libsoil
+  * Libconfig for C++
+  * SOIL
+  * FTGL
 
 ####Requirements installation with apt-get####
 ```
