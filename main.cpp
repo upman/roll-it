@@ -7,6 +7,7 @@
 #include "./components/headers/configs.h"
 #include "./components/headers/textures.h"
 b2World* world;
+b2Body* selectedBody;
 extern GLuint RectTexture;
 extern GLuint TriTexture;
 extern GLuint BackTexture;
@@ -137,8 +138,48 @@ void keyboard(unsigned char key, int x, int y){
 	}
 }
 
+class WorldQueryCallback : public b2QueryCallback {
+  public:
+      bool ReportFixture(b2Fixture* fixture) {
+					selectedBody=fixture->GetBody();
+          return false;//Stop after finding the first fixture
+      }
+};
+
+void mouse(int button, int state, int x, int y){
+	if(glutGetModifiers()==GLUT_ACTIVE_CTRL){
+		return;
+	}
+	if (button == GLUT_LEFT_BUTTON){
+		if(selectedBody && state == GLUT_UP){
+			selectedBody->SetAwake(true);
+			selectedBody = NULL;
+		}
+
+		if (state == GLUT_DOWN){
+			b2Vec2 p;
+			b2Vec2 d;
+			p.Set((float)x*P2M,(float)y*P2M);
+			d.Set(0.001f, 0.001f);
+
+			b2AABB aabb;
+			aabb.lowerBound = p - d;
+			aabb.upperBound = p + d;
+
+			// Query the world for overlapping fixtures on aabb.
+			WorldQueryCallback  callback;
+			world->QueryAABB(&callback, aabb);
+		}
+	}
+}
+
 void motion(int x, int y){
-  addRect(x,y,1,1, world, false, false);
+	if(selectedBody){
+		selectedBody->SetTransform(b2Vec2(x*P2M,y*P2M),selectedBody->GetAngle());
+	}
+	else{
+		addRect(x,y,1,1, world, false, false);
+	}
 }
 
 void step(){
@@ -163,8 +204,8 @@ int main(int argc,char** argv)
 	createMenu();
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
+	glutMouseFunc(mouse);
 	glutMotionFunc(motion);
-  	glutIdleFunc(step);
-
+  glutIdleFunc(step);
 	glutMainLoop();
 }
