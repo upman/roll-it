@@ -12,6 +12,7 @@ b2World* world;
 b2Body* selectedBody;
 FTGLPixmapFont* font;
 int introScreenFlag=1;
+int WIDTH,HEIGHT;
 extern GLuint RectTexture;
 extern GLuint TriTexture;
 extern GLuint BackTexture;
@@ -82,9 +83,9 @@ void renderBackground(){
 	glColor3ub(255,255,255);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 0.0f); glVertex2f(0.0, 0.0f);	// Bottom Left Of The Texture and Quad
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(640.0f, 0.0f);	// Bottom Right Of The Texture and Quad
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(640.0f, 480.0f);	// Top Right Of The Texture and Quad
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(0.0f,  480.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(WIDTH, 0.0f);	// Bottom Right Of The Texture and Quad
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(WIDTH, HEIGHT);	// Top Right Of The Texture and Quad
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0.0f,  HEIGHT);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 }
@@ -106,7 +107,30 @@ void display(){
 	glutSwapBuffers();
 }
 
+void windowToWorld(int* x,int* y){
+	GLint viewport[4]; //var to hold the viewport info
+	GLdouble modelview[16]; //var to hold the modelview info
+	GLdouble projection[16]; //var to hold the projection matrix info
+	GLfloat winX, winY, winZ; //variables to hold screen x,y,z coordinates
+	GLdouble worldX, worldY, worldZ; //variables to hold world x,y,z coordinates
+
+	glGetDoublev( GL_MODELVIEW_MATRIX, modelview ); //get the modelview info
+	glGetDoublev( GL_PROJECTION_MATRIX, projection ); //get the projection matrix info
+	glGetIntegerv( GL_VIEWPORT, viewport ); //get the viewport info
+
+	winX = (float)*x;
+	winY = (float)viewport[3] - (float)*y;
+	winZ = 0;
+
+	//get the world coordinates from the screen coordinates
+	gluUnProject( winX, winY, winZ, modelview, projection, viewport, &worldX, &worldY, &worldZ);
+
+	*x = worldX;
+	*y = worldY;
+}
+
 void keyboard(unsigned char key, int x, int y){
+	windowToWorld(&x,&y);
 	if(key == ' '){
 		float width = loadConfig("configs","rectangle","width");
 		float height = loadConfig("configs","rectangle","height");
@@ -159,9 +183,7 @@ public:
 };
 
 void mouse(int button, int state, int x, int y){
-	if(glutGetModifiers()==GLUT_ACTIVE_CTRL){
-		return;
-	}
+	windowToWorld(&x,&y);
 	if (button == GLUT_LEFT_BUTTON){
 		if(selectedBody && state == GLUT_UP){
 			selectedBody->SetAwake(true);
@@ -186,6 +208,7 @@ void mouse(int button, int state, int x, int y){
 }
 
 void motion(int x, int y){
+	windowToWorld(&x,&y);
 	if(selectedBody){
 		selectedBody->SetTransform(b2Vec2(x*P2M,y*P2M),selectedBody->GetAngle());
 	}
@@ -246,10 +269,10 @@ int main(int argc,char** argv){
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowPosition(0,0);
 	readFiles();
-	float window_height = loadConfig("configs","window","height");
-	float window_width = loadConfig("configs","window","width");
+	WIDTH = (int)loadConfig("configs","window","width");
+	HEIGHT = (int)loadConfig("configs","window","height");
 	font = new FTGLPixmapFont("../fonts/chawp.ttf");
-	glutInitWindowSize(window_width,window_height);
+	glutInitWindowSize(WIDTH,HEIGHT);
 	glutCreateWindow("Roll It");
 	init();
 	switchToIntro();
