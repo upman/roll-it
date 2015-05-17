@@ -9,7 +9,7 @@ Computer Graphics Course Mini-Project.
 
 ####Requirements installation with apt-get####
 ```
-sudo apt-get install -y libconfig++-dev freeglut3-dev libbox2d-dev libsoil-dev
+sudo apt-get install -y libconfig++-dev freeglut3-dev libbox2d-dev libsoil-dev libftgl-dev
 ```
 
 ###Build and Run###
@@ -34,7 +34,7 @@ make run
 
   Space - Add flat static rotating platform at the cursor's location.
 
-  Left-Click + Drag - Draw a static line.
+  Left-Click + Drag - Draw a static line or pickup object if click is on an object
 
   R - Clear all bodies in the world.
 
