@@ -218,10 +218,17 @@ void keyboard(unsigned char key, int x, int y){
 		if(selectedBody){
 			if(selectedBody->GetUserData()){
 				selectedBody->SetUserData(NULL);
+				selectedBody->SetAngularVelocity(0.5f);
 			}
 			else{
 				selectedBody->SetUserData(&rotateflag);
 			}
+		}
+	}
+	else if(key == 'x'){
+		if(selectedBody){
+			selectedBody->GetWorld()->DestroyBody(selectedBody);
+			selectedBody = NULL;
 		}
 	}
 }
