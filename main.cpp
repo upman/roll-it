@@ -230,7 +230,7 @@ void keyboard(unsigned char key, int x, int y){
 		}
 	}
 	else if(key == 'x'){
-		if(selectedBody){
+		if(selectedBody && selectedBody != duster){
 			selectedBody->GetWorld()->DestroyBody(selectedBody);
 			selectedBody = NULL;
 		}
