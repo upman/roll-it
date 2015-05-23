@@ -4,7 +4,6 @@
 #include <iomanip>
 #include <cstdlib>
 #include <libconfig.h++>
-#include <stdarg.h>
 using namespace std;
 using namespace libconfig;
 int readFiles();
