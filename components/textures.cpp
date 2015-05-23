@@ -8,6 +8,7 @@ GLuint RectTexture;
 GLuint TriTexture;
 GLuint BackTexture;
 GLuint CircTexture;
+GLuint DusterTexture;
 string names[100];
 int counter=1;
 int maximum=1;
@@ -38,20 +39,20 @@ static GLuint LoadTexture(char* filename)
 void listFiles(const char* path )
 {
    DIR* dirFile = opendir( path );
-   if ( dirFile ) 
+   if ( dirFile )
    {
       struct dirent* hFile;
-      while (( hFile = readdir( dirFile )) != NULL ) 
+      while (( hFile = readdir( dirFile )) != NULL )
       {
          if ( !strcmp( hFile->d_name, "."  )) continue;
          if ( !strcmp( hFile->d_name, ".." )) continue;
 
-         // dirFile.name is the name of the file. Do whatever string comparison 
+         // dirFile.name is the name of the file. Do whatever string comparison
          // you want here. Something like:
          if ( strstr( hFile->d_name, "" )){
             names[counter++]=hFile->d_name;
         }
-      } 
+      }
       closedir( dirFile );
    }
 }
@@ -60,6 +61,7 @@ void LoadAllTextures(){
   TriTexture = LoadTexture((char *)"../img/rectangle.png");
   BackTexture = LoadTexture((char *)"../img/background.bmp");
   CircTexture = LoadTexture((char *)"../img/rectangle.png");
+  DusterTexture = LoadTexture((char *)"../img/duster.jpg");
 }
 void maxFinder(){
 	int max=0;

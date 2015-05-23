@@ -13,17 +13,20 @@ b2Body* selectedBody;
 FTGLPixmapFont* font;
 int introScreenFlag=1;
 char rotateflag = 'r';
+b2Body* duster;
 int WIDTH,HEIGHT;
 extern GLuint RectTexture;
 extern GLuint TriTexture;
 extern GLuint BackTexture;
 extern GLuint CircTexture;
+extern GLuint DusterTexture;
 
 void resetWorld(){
 	delete world;
 	float gravity = loadConfig("configs","world","gravity");
 	world = new b2World(b2Vec2(0.0,gravity));
-	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false);
+	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false);//ground
+	duster = addRect(WIDTH/10,HEIGHT/10,30,70, world, false);
 }
 void menu(int value){
 	if(value == 1){
@@ -74,9 +77,10 @@ void renderWorld(){
 		}
 		else{
 			for(int i = 0; i < 4; i++)
-			points[i]=((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertex(i);
-
-			drawRect(points,tmp->GetWorldCenter(),tmp->GetAngle(),RectTexture);
+				points[i]=((b2PolygonShape*)tmp->GetFixtureList()->GetShape())->GetVertex(i);
+			GLuint texture;
+			texture = (tmp == duster? DusterTexture : RectTexture);
+			drawRect(points,tmp->GetWorldCenter(),tmp->GetAngle(),texture);
 			tmp=tmp->GetNext();
 		}
 	}
@@ -297,11 +301,41 @@ void mouse(int button, int state, int x, int y){
 	}
 }
 
+class DusterQueryCallback : public b2QueryCallback {
+public:
+	bool ReportFixture(b2Fixture* fixture) {
+		if(fixture->GetBody() == duster){
+			return true;
+		}
+		fixture->GetBody()->GetWorld()->DestroyBody(fixture->GetBody());
+		return true;
+	}
+};
+
 void motion(int x, int y){
 	windowToWorld(&x,&y);
 	if(selectedBody){
 		selectedBody->SetTransform(b2Vec2(x*P2M,y*P2M),selectedBody->GetAngle());
 		selectedBody->SetAwake(false);
+
+		selectedBody->SetTransform(b2Vec2(x*P2M,y*P2M),selectedBody->GetAngle());
+				selectedBody->SetAwake(false);
+
+				if(selectedBody == duster){
+					b2Vec2 p;
+					b2Vec2 d;
+					p.Set((float)(x-15)*P2M,(float)(y-35)*P2M);
+					d.Set((float)(x+15)*P2M,(float)(y+35)*P2M);
+
+					b2AABB aabb;
+					aabb.lowerBound = p;
+					aabb.upperBound = d;
+
+					// Query the world for overlapping fixtures on aabb.
+					DusterQueryCallback  callback;
+					world->QueryAABB(&callback, aabb);
+				}
+
 	}
 	else{
 		addRect(x,y,1,1, world, false);
@@ -330,7 +364,8 @@ void init(){
 	}
 	float gravity = loadConfig("configs","world","gravity");
 	world=new b2World(b2Vec2(0.0,gravity));
-	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false);
+	addRect(WIDTH/2,HEIGHT-50,WIDTH,30, world, false);//ground
+	duster = addRect(WIDTH/10,HEIGHT/10,30,70, world, false);
 	glutPostRedisplay();
 }
 

@@ -21,6 +21,7 @@ b2Body* addRect(int x,int y,int w,int h, b2World* world, bool dyn=true)
 	fixturedef.restitution = loadConfig("configs","rectangle","restitution");
 	fixturedef.friction = loadConfig("configs","rectangle","friction");
 	body->CreateFixture(&fixturedef);
+	return body;
 }
 
 void drawRect(b2Vec2* points, b2Vec2 center, float angle, GLuint texture)
