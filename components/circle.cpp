@@ -3,7 +3,7 @@
 GLfloat vertices[360][3];
 GLfloat textureCoords[360][3];
 
-void addCircle(int x, int y, int r,  b2World* world, bool dyn=true){
+b2Body* addCircle(int x, int y, int r,  b2World* world, bool dyn=true){
   b2BodyDef bodydef;
 	bodydef.position.Set(x*P2M,y*P2M);
 	if(dyn)
@@ -22,6 +22,7 @@ void addCircle(int x, int y, int r,  b2World* world, bool dyn=true){
   fixturedef.restitution = loadConfig("configs","circle","restitution");
   fixturedef.density = loadConfig("configs","circle","friction");
   body->CreateFixture(&fixturedef); //add a fixture to the body
+  return body;
 }
 void drawCircle(b2Vec2 center, float angle, float radius,GLuint texture){
 	glPushMatrix();

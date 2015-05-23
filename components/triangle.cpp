@@ -24,6 +24,7 @@ b2Body* addTriangle(int cx,int cy, int scale, b2World* world, bool dyn=true)
 	fixturedef.friction = loadConfig("configs","triangle","friction");
 	fixturedef.restitution = loadConfig("configs","triangle","restitution");
 	body->CreateFixture(&fixturedef);
+	return body;
 }
 
 void drawTriangle(b2Vec2* points, b2Vec2 center, float angle, GLuint texture){

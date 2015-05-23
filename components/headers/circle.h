@@ -5,7 +5,7 @@
 #include <Box2D/Box2D.h>
 #include "../../config/constants.h"
 
-void addCircle(int, int, int, b2World*, bool);
+b2Body* addCircle(int, int, int, b2World*, bool);
 void drawCircle(b2Vec2, float, float, GLuint);
 void computeCircleVertices();
 
