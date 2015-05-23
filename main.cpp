@@ -338,7 +338,7 @@ void motion(int x, int y){
 
 	}
 	else{
-		addRect(x,y,1,1, world, false);
+		addRect(x,y,2,2, world, false);
 	}
 }
 
