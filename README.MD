@@ -1,5 +1,6 @@
-Computer Graphics Course Mini-Project.
-===================================
+# Description
+A 2D world simulation with real physics (friction, gravity, collisions etc.)
+Built on C++ and OpenGL
 
 ##Requirements##
   * Box2D
